@@ -1,0 +1,14 @@
+torch
+transformers
+scikit-learn
+flask
+transformers
+numpy
+pandas
+requests
+gunicorn
+Flask-Cors
+nltk
+gensim 
+pyproject
+sentence-transformers

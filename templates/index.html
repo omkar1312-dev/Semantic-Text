@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Text Similarity Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Semantic Text Similarity Calculator</h1>
+        <form id="textForm">
+            <label for="text1">Text 1:</label>
+            <input type="text" id="text1" name="text1" required><br>
+            <label for="text2">Text 2:</label>
+            <input type="text" id="text2" name="text2" required><br>
+            <button type="submit">Calculate Similarity</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            const textForm = document.getElementById('textForm');
+            const resultDiv = document.getElementById('result');
+
+            textForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const text1 = document.getElementById('text1').value;
+                const text2 = document.getElementById('text2').value;
+
+                try {
+                    const response = await fetch('/calculate_similarity/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ text1, text2 })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+
+                    const data = await response.json();
+                    resultDiv.innerHTML = `<strong>Similarity Score:</strong> ${data.similarity_score.toFixed(2)}`;
+                } catch (error) {
+                    console.error('Error:', error.message);
+                    resultDiv.innerHTML = 'An error occurred while fetching data';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
